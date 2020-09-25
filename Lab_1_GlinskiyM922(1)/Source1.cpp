@@ -16,46 +16,70 @@ public:
 };
 
 class Triangle : public Point {
-private: 
+private:
 	sf::Event N_event;
-	sf::RenderWindow N_window;
+	sf::ConvexShape m_shape;
+	//ƒŒ¡¿¬»“‹ Ã¿——»¬ “Œ◊≈  “–≈”√ŒÀ‹Õ» ¿ - “–¿≈ “Œ–»»
+
+
 	double N_radius = 80;
 	double N_corner = 0;
 	double N_N = 800;
 	double N_M = 800;
 public:
-	Triangle() : Point(400, 400) {}
-	void draw() {
-		N_window.create(sf::VideoMode(N_N, N_M), "TRIANGLE");
-		sf::VertexArray N_Triangle(sf::TriangleFan, 5);
-		N_Triangle[0].position = sf::Vector2f(N_Ox, N_Oy);
-		N_Triangle[0].color = sf::Color(255, 192, 255);
-		for (int i = 0; i < 4; i++) {
-			N_Triangle[i + 1].position = sf::Vector2f(N_Ox + N_radius * cos(((30 + 120 * i) * 3.14) / 180), N_Oy + N_radius * sin(((30 + 120 * i) * 3.14) / 180));
-			N_Triangle[i + 1].color = sf::Color(255, 192, 255);
-		}
-		while (N_window.isOpen()) {
-			while (N_window.pollEvent(N_event)) {
-				if (N_event.type == sf::Event::Closed)
-					N_window.close();
-			}
-			N_Triangle[0].position = sf::Vector2f(N_Ox, N_Oy);
-			N_Triangle[0].color = sf::Color(255, 192, 255);
-			for (int i = 0; i < 4; i++) {
-				N_Triangle[i + 1].position = sf::Vector2f(N_Ox + N_radius * cos(((30 + 120 * i) * 3.14) / 180), N_Oy + N_radius * sin(((30 + 120 * i) * 3.14 / 180)));
-				N_Triangle[i + 1].color = sf::Color(255, 192, 255);
-			}
-			N_Ox = N_Ox - 10;
-			N_Oy = N_Oy - 10;
-			N_corner = N_corner + 0.1;
-			N_window.clear(sf::Color(0, 255, 255));
-			N_window.draw(N_Triangle);
-			N_window.display();
+	Triangle(sf::Vector2f StartingPoint) : Point(StartingPoint.x, StartingPoint.y)
+	{
+		m_shape.SetPointCount(3);
+		m_shape[0] = sf::Vector2f(/*“¬Œ»  ŒŒ–ƒ»Õ¿“€ Œ“ÕŒ—»“≈À‹ÕŒ StartingPoint*/);
+		m_shape[1] = sf::Vector2f(/*“¬Œ»  ŒŒ–ƒ»Õ¿“€ Œ“ÕŒ—»“≈À‹ÕŒ StartingPoint*/);
+		m_shape[2] = sf::Vector2f(/*“¬Œ»  ŒŒ–ƒ»Õ¿“€ Œ“ÕŒ—»“≈À‹ÕŒ StartingPoint*/);
 
-		}
+		//—Œ—“¿¬»“‹ ¬—≈ “Œ◊ » “–≈”√ŒÀ‹Õ» ¿_“–¿≈ “Œ–»» Õ¿ Œ—ÕŒ¬≈ »«¬≈—“Õ€’ “Œ◊≈  “–≈”√ŒÀ‹Õ» ¿!
+	}
+
+
+	Triangle(sf::Vector2f A, sf::Vector2f B, sf::Vector2f C)
+	{
+		m_shape.SetPointCount(3);
+		m_shape[0] = A;
+		m_shape[1] = B;
+		m_shape[2] = C;
+		//—Œ—“¿¬»“‹ ¬—≈ “Œ◊ » “–≈”√ŒÀ‹Õ» ¿_“–¿≈ “Œ–»» Õ¿ Œ—ÕŒ¬≈ »«¬≈—“Õ€’ “Œ◊≈  “–≈”√ŒÀ‹Õ» ¿!
+	}
+	void draw(sf::RenderWindow N_window)
+	{
+		N_window.draw(m_shape);
+	}
+
+	void move(sf::Vector2f Step)
+	{
+		N_Ox += Step.x;
+		N_Oy += Step.y;
+		m_shape.SetPosition(m_shape.GetPosition() + sf::Vector2f(N_Ox, N_Oy));
+	}
+
+private:
+	void refresh()
+	{
+
 	}
 };
 int main() {
-	Triangle Triangle;
-	Triangle.draw();
+	sf::RenderWindow N_window(900, 900);
+	sf::Vector2f POINTS[] = {
+		sf::Vector2f(),
+		sf::Vector2f(),
+		sf::vector2f()
+	};
+	Triangle NewTriangle(POINTS[0], POINTS[1], POINTS[2]);
+	Triangle NewTriangle2(POINTS[0]);
+
+	while (N_window.is_open())
+	{
+		NewTriangle2.move(sf::Vector2f(1, 1));//—ƒ¬»√¿“‹ Õ≈ Õ¿ 1,1!!! ‡ Ì‡ ‡ÁÌÓÒÚ¸ ‡‰ËÛÒ ‚ÂÍÚÓ‡ ‰Ó ÒÎÂ‰Û˛˘ÂÈ ÚÓ˜ÍË (ÚÂÛ„ÓÎ¸ÌËÍ‡-Ú‡ÂÍÚÓËË) Ë ÚÂÍÛ˘Â„Ó ÔÓÎÓÊÂÌËˇ ÚÂÛ„ÓÎ¸ÌËÍ‡
+		N_window.clear();
+		NewTriangle2.draw(N_window);
+		N_window.display();
+	}
+
 }
